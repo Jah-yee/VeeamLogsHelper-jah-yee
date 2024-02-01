@@ -205,8 +205,9 @@ class AgentLookup(sublime_plugin.EventListener):
         
         p = re.compile("^\[(.+?)\]")
         m = p.search(current_line)
-        if m: 
-            datetime = m.group(1)
+        if not m:
+            return
+        datetime = m.group(1)
 
         agent = None
         if view.file_name():
