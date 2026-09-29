@@ -54,7 +54,7 @@ def collect_info(path):
     cloud_agent_started_regex_ip = re.compile("Root Ip=&quot;(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})&quot;")
 
     for job_file in job_files:
-        with open(job_file) as f:
+        with open(job_file, encoding='utf-8', errors='replace') as f:
             #print (job_file)
             for line in f:
                 if "Starting agent with" in line:
