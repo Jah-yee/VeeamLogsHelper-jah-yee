@@ -124,16 +124,20 @@ def lookup_agent (digest, datetime):
         session_matched.sort(key=sort_by_date)
 
         ss = None
-        for s in session_matched:
-            if sortable_date(s.date) <= sortable_date(datetime):
-                ss = s
-            else:
-                break
+        if datetime is not None:
+            for s in session_matched:
+                if sortable_date(s.date) <= sortable_date(datetime):
+                    ss = s
+                else:
+                    break
 
-        if ss == None:
-            print("No suitable sessions by date")
-            return
-        session_matched = ss
+            if ss == None:
+                print("No suitable sessions by date")
+                return
+            session_matched = ss
+        else:
+            # No timestamp on this line — pick the most recent session
+            session_matched = session_matched[-1]
     else:
         session_matched = session_matched[0]
     
@@ -205,8 +209,7 @@ class AgentLookup(sublime_plugin.EventListener):
         
         p = re.compile("^\[(.+?)\]")
         m = p.search(current_line)
-        if m: 
-            datetime = m.group(1)
+        datetime = m.group(1) if m else None
 
         agent = None
         if view.file_name():
